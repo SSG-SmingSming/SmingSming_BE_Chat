@@ -5,7 +5,18 @@ spring:
   # application 정보 설정
   application:
     name: chat-server
+  # 컨피그 서버 설정
   cloud:
     config:
       name: chat-server
       profile: docker
+  # JPA 설정
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+

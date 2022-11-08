@@ -1,3 +1,12 @@
 spring:
+  application:
+    name: chat-server
+  redis:
+    port: 6379
+    url: redis://3.35.94.116:6379
   profiles:
     active: docker
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates
+    suffix: .ftl
