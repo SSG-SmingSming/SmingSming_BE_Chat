@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class RoomVo {
     private String roomId;
     private String roomName;
-    private int participant;
+    private Long participant;
     private boolean isLock;
     private String userId;
     private String userName;

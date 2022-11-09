@@ -85,7 +85,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         int count = iParticipantRepository.countByChatRoomId(roomId);
 
         RoomVo roomVo = new ModelMapper().map(room, RoomVo.class);
-        roomVo.setParticipant(count);
+        roomVo.setParticipant(iParticipantRepository.countParticipantByRoomId(roomId));
         roomVo.setUserName(user.getNickName());
         roomVo.setUserThumbnail(user.getUserThumbnail());
         roomVo.setPlaylistName(playlistVo.getTitle());
@@ -173,8 +173,6 @@ public class ChatRoomServiceImpl implements IChatRoomService{
 
         roomList.forEach(v -> {
 
-            System.out.println(v.getId());
-            System.out.println(iParticipantRepository.countParticipantByRoomId(v.getId()));
             UserDetailVo user = new UserDetailVo();
             PlaylistVo playlistVo = new PlaylistVo();
             try {
@@ -192,7 +190,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
             RoomVo roomVo = RoomVo.builder()
                     .roomId(v.getId())
                     .roomName(v.getName())
-                    .participant(iParticipantRepository.countByChatRoomId(v.getId()))
+                    .participant(iParticipantRepository.countParticipantByRoomId(v.getId()))
                     .isLock(v.isLock())
                     .userId(v.getUserId())
                     .userName(user.getNickName())
@@ -287,7 +285,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
             List<String> enterInfo = opsEnterInfo.values(v.getId());
 
             RoomVo roomVo = mapper.map(v, RoomVo.class);
-            roomVo.setParticipant(enterInfo.size());
+            roomVo.setParticipant(iParticipantRepository.countParticipantByRoomId(v.getId()));
             roomVo.setUserName(user.getNickName());
             roomVo.setUserThumbnail(user.getUserThumbnail());
             roomVo.setPlaylistName(playlistVo.getTitle());
