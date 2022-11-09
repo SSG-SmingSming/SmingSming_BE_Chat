@@ -42,14 +42,12 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     private final RedisMessageListenerContainer redisMessageListener;
     private final IChatRoomRepository iChatRoomRepository;
     private final IParticipantRepository iParticipantRepository;
-//    private final IManagerRepository iManagerRepository;
     private final RedisSubscriber redisSubscriber;
     private final UserServiceClient userServiceClient;
     private final SongServiceClient songServiceClient;
     private static final String CHAT_ROOMS = "CHAT_ROOM";
     private static final String ENTER_INFO = "ENTER_INFO";
     private final RedisTemplate<String, Object> redisTemplate;
-//    private final IChatRoomRepository iChatRoomRepository;
     private HashOperations<String, String, ChatRoom> opsHashChatRoom;
     private HashOperations<String, String, String> opsEnterInfo;
     private Map<String, ChannelTopic> topics;
@@ -62,21 +60,9 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         topics = new HashMap<>();
     }
 
-//    @Override
-//    public List<ChatRoom> findAllRoom() {
-//        return opsHashChatRoom.values(CHAT_ROOMS);
-//    }
-
-//    @Override
-//    public ChatRoom createChatRoom(String name) {
-//        ChatRoom chatRoom = ChatRoom.create(name);
-//        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getId(), chatRoom);
-//        return chatRoom;
-//    }
     @Override
     public RoomVo findById(String roomId) {
 
-//        ChatRoom room = opsHashChatRoom.get(CHAT_ROOMS, roomId);
         ChatRoom3 room = iChatRoomRepository.findById(roomId).get();
 
         UserDetailVo user = new UserDetailVo();
@@ -118,10 +104,6 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getId(), chatRoom);
 
         iChatRoomRepository.save(new ModelMapper().map(chatRoom, ChatRoom3.class));
-//        iChatRoomRepository.save(chatRoom);
-
-//        Managerqq temp = Managerqq.create(roomAddReqVo.getName());
-//        iManagerRepository.save(temp);
 
         return chatRoom;
     }
@@ -147,8 +129,6 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     @Override
     @Transactional
     public void quitRoom(String roomId, String userId) {
-//        String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
-
         iParticipantRepository.deleteByUserIdAndChatRoomId(userId, roomId);
 
         if (iParticipantRepository.countByChatRoomId(roomId) == 0) {
@@ -185,17 +165,16 @@ public class ChatRoomServiceImpl implements IChatRoomService{
 
     @Override
     public List<RoomVo> findAllChatRoom(int page) {
-
-        ModelMapper mapper = new ModelMapper();
-
         Pageable pr = PageRequest.of(page - 1, 10, Sort.by("id").descending());
-
-
+        
         Page<ChatRoom3> roomList = iChatRoomRepository.findAll(pr);
 
         List<RoomVo> returnList = new ArrayList<>();
 
         roomList.forEach(v -> {
+
+            System.out.println(v.getId());
+            System.out.println(iParticipantRepository.countParticipantByRoomId(v.getId()));
             UserDetailVo user = new UserDetailVo();
             PlaylistVo playlistVo = new PlaylistVo();
             try {
@@ -222,11 +201,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
                     .playlistName(playlistVo.getTitle())
                     .playlistThumbnail(playlistVo.getPlaylistThumbnail())
                     .build();
-//            roomVo.setParticipant(iParticipantRepository.countByChatRoomId(v.getId()));
-//            roomVo.setUserName(user.getNickName());
-//            roomVo.setUserThumbnail(user.getUserThumbnail());
-//            roomVo.setPlaylistName(playlistVo.getTitle());
-//            roomVo.setPlaylistThumbnail(playlistVo.getPlaylistThumbnail());
+
             returnList.add(roomVo);
         });
 
@@ -275,18 +250,6 @@ public class ChatRoomServiceImpl implements IChatRoomService{
 //        List<Participant> participantList = iParticipantRepository.findAllByChatRoomId(pr, roomId);
 
         List<String> participantList = iParticipantRepository.getParticipant(roomId);
-
-//        List<String> participantList = iParticipantRepository.findAllByChatRoomId(pr,roomId);
-
-
-//        participantList.forEach(v -> {
-//            try {
-//                UserDetailVo user = userServiceClient.getUser(v.getUserId());
-//                userList.add(user);
-//            } catch (FeignException ex) {
-//                log.info(ex.getMessage());
-//            }
-//        });
 
 
 

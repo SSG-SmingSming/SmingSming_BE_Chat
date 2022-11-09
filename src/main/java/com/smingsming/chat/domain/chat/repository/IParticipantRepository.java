@@ -18,6 +18,14 @@ public interface IParticipantRepository extends JpaRepository<Participant, Long>
 
     @Query(value = "select distinct p.userId from Participant p where p.chatRoom.id = :roomId")
     List<String> getParticipant(@Param(value = "roomId") String roomId);
+
+
+
+
+    @Query(value = "select count(distinct p.userId) from Participant p where p.chatRoom.id = :roomId")
+    Long countParticipantByRoomId(@Param(value = "roomId") String roomId);
+
+
 //    int countDistinctByChatRoomId
     List<String> findDistinctuserIdByChatRoomId(String roomId);
 }
