@@ -1,6 +1,6 @@
 package com.smingsming.chat.global.pubsub;
 
-import com.smingsming.chat.domain.chat.entity.ChatMessage;
+import com.smingsming.chat.entity.chat.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;

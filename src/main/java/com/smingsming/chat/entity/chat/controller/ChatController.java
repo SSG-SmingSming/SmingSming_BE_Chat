@@ -1,7 +1,7 @@
-package com.smingsming.chat.domain.chat.controller;
+package com.smingsming.chat.entity.chat.controller;
 
-import com.smingsming.chat.domain.chat.entity.ChatMessage;
-import com.smingsming.chat.domain.chat.service.IChatRoomService;
+import com.smingsming.chat.entity.chat.entity.ChatMessage;
+import com.smingsming.chat.entity.chat.service.IChatRoomService;
 import com.smingsming.chat.global.pubsub.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;

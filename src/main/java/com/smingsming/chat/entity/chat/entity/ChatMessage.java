@@ -1,4 +1,4 @@
-package com.smingsming.chat.domain.chat.entity;
+package com.smingsming.chat.entity.chat.entity;
 
 
 import lombok.Getter;

@@ -1,10 +1,10 @@
-package com.smingsming.chat.domain.chat.service;
+package com.smingsming.chat.entity.chat.service;
 
-import com.smingsming.chat.domain.chat.entity.ChatRoom;
-import com.smingsming.chat.domain.chat.entity.Participant;
-import com.smingsming.chat.domain.chat.repository.IChatRoomRepository;
-import com.smingsming.chat.domain.chat.repository.IParticipantRepository;
-import com.smingsming.chat.domain.chat.vo.*;
+import com.smingsming.chat.entity.chat.entity.ChatRoom;
+import com.smingsming.chat.entity.chat.entity.Participant;
+import com.smingsming.chat.entity.chat.repository.IChatRoomRepository;
+import com.smingsming.chat.entity.chat.repository.IParticipantRepository;
+import com.smingsming.chat.entity.chat.vo.*;
 import com.smingsming.chat.global.client.SongServiceClient;
 import com.smingsming.chat.global.client.UserServiceClient;
 import com.smingsming.chat.global.common.jwt.JwtTokenProvider;

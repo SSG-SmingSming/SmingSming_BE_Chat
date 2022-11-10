@@ -1,4 +1,4 @@
-package com.smingsming.chat.domain.chat.vo;
+package com.smingsming.chat.entity.chat.vo;
 
 import lombok.Builder;
 import lombok.Data;

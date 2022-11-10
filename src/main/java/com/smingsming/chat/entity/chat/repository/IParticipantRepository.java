@@ -1,8 +1,6 @@
-package com.smingsming.chat.domain.chat.repository;
+package com.smingsming.chat.entity.chat.repository;
 
-import com.smingsming.chat.domain.chat.entity.Participant;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.smingsming.chat.entity.chat.entity.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

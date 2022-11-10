@@ -1,10 +1,10 @@
-package com.smingsming.chat.domain.chat.controller;
+package com.smingsming.chat.entity.chat.controller;
 
-import com.smingsming.chat.domain.chat.entity.ChatRoom;
-import com.smingsming.chat.domain.chat.service.IChatRoomService;
-import com.smingsming.chat.domain.chat.vo.RoomAddReqVo;
-import com.smingsming.chat.domain.chat.vo.RoomEnterReqVo;
-import com.smingsming.chat.domain.chat.vo.RoomVo;
+import com.smingsming.chat.entity.chat.entity.ChatRoom;
+import com.smingsming.chat.entity.chat.service.IChatRoomService;
+import com.smingsming.chat.entity.chat.vo.RoomAddReqVo;
+import com.smingsming.chat.entity.chat.vo.RoomEnterReqVo;
+import com.smingsming.chat.entity.chat.vo.RoomVo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

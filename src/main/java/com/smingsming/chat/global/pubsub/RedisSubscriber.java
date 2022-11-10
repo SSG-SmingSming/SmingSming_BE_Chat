@@ -1,6 +1,6 @@
 package com.smingsming.chat.global.pubsub;
 
-import com.smingsming.chat.domain.chat.entity.ChatMessage;
+import com.smingsming.chat.entity.chat.entity.ChatMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
