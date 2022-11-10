@@ -53,6 +53,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         topics = new HashMap<>();
     }
 
+    //  채팅방 정보 조회
     @Override
     public RoomVo findById(String roomId) {
 
@@ -73,10 +74,6 @@ public class ChatRoomServiceImpl implements IChatRoomService{
             log.info(ex.getMessage());
         }
 
-//        List<String> enterInfo = opsEnterInfo.values(room.getId());
-
-        int count = iParticipantRepository.countByChatRoomId(roomId);
-
         RoomVo roomVo = new ModelMapper().map(room, RoomVo.class);
         roomVo.setParticipant(iParticipantRepository.countParticipantByRoomId(roomId));
         roomVo.setUserName(user.getNickName());
@@ -87,6 +84,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         return roomVo;
     }
 
+    // 채팅방 생성
     @Override
     public ChatRoom createChatRoom(RoomAddReqVo roomAddReqVo, HttpServletRequest request) {
         String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
@@ -94,14 +92,12 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         ChatRoom chatRoom = ChatRoom.create(roomAddReqVo.getName(), roomAddReqVo.getPassword(),
                 roomAddReqVo.isLock(), userId, roomAddReqVo.getPlaylistId());
 
-//        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getId(), chatRoom);
-
-//        iChatRoomRepository.save(new ModelMapper().map(chatRoom, ChatRoom3.class));
         iChatRoomRepository.save(chatRoom);
 
         return chatRoom;
     }
 
+    // 채팅방 입장 (stomp 연결)
     @Override
     public void enterChatRoom(String roomId, String userId) {
         ChannelTopic topic = topics.get(roomId);
@@ -119,7 +115,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
                 .build());
     }
 
-
+    // 채팅방 퇴장
     @Override
     @Transactional
     public void quitRoom(String roomId, String userId) {
@@ -131,6 +127,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         }
     }
 
+    // 채팅방 입장 (웹)
     @Override
     public ChatRoom enterRoom(RoomEnterReqVo reqVo, HttpServletRequest request) {
         String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
@@ -145,18 +142,10 @@ public class ChatRoomServiceImpl implements IChatRoomService{
                 return null;
         }
 
-        if (iParticipantRepository.existsByChatRoomIdAndUserId(reqVo.getRoomId(), userId))
-            return null;
-
-        iParticipantRepository.save(Participant.builder()
-                .userId(userId)
-                .chatRoom(room.get())
-                .build());
-
         return room.get();
     }
 
-
+    // 채팅방 목록 조회
     @Override
     public List<RoomVo> findAllChatRoom(int page) {
         Pageable pr = PageRequest.of(page - 1, 10, Sort.by("id").descending());
@@ -201,53 +190,25 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         return returnList;
     }
 
+    // Redis Topic 조회
     @Override
     public ChannelTopic getTopic(String roomId) {
         return topics.get(roomId);
     }
 
-    @Override
-    public String getRoomId(String destination) {
-        int lastIndex = destination.lastIndexOf('/');
-        if (lastIndex != -1) {
-            return destination.substring(lastIndex + 1);
-        } else {
-            return "";
-        }
-    }
-
-    @Override
-    public void setUserEnterInfo(String sessionId, String roomId) {
-        opsEnterInfo.put(ENTER_INFO, sessionId, roomId);
-    }
-
-//    @Override
-//    public String getUserEnterRoomId(String sessionId) {
-//        return opsEnterInfo.get(ENTER_INFO, sessionId);
-//    }
-//
-//    @Override
-//    public void remoteUserEnterInfo(String sessionId) {
-//        opsEnterInfo.delete(ENTER_INFO, sessionId);
-//    }
-
-
-
+    // 채팅방 참가자 목록 조회
     @Override
     public List<String> getParticipant(int page, String roomId, HttpServletRequest request) {
         List<ParticipantVo> returnVo = new ArrayList<>();
 
         Pageable pr = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
-//        List<Participant> participantList = iParticipantRepository.findAllByChatRoomId(pr, roomId);
-
         List<String> participantList = iParticipantRepository.getParticipant(roomId);
-
-
 
         return participantList;
     }
 
+    // 채팅방 검색
     @Override
     public RoomSearchVo searchRoom(String keyword, int page, HttpServletRequest request) {
         String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
@@ -275,8 +236,6 @@ public class ChatRoomServiceImpl implements IChatRoomService{
             } catch (FeignException ex) {
                 log.info(ex.getMessage());
             }
-
-            List<String> enterInfo = opsEnterInfo.values(v.getId());
 
             RoomVo roomVo = mapper.map(v, RoomVo.class);
             roomVo.setParticipant(iParticipantRepository.countParticipantByRoomId(v.getId()));
