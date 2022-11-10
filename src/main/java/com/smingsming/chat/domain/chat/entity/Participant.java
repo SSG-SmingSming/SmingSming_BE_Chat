@@ -1,7 +1,5 @@
 package com.smingsming.chat.domain.chat.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +23,5 @@ public class Participant {
 //    @ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
-    private ChatRoom3 chatRoom;
+    private ChatRoom chatRoom;
 }

@@ -1,10 +1,6 @@
 package com.smingsming.chat.domain.chat.service;
 
 import com.smingsming.chat.domain.chat.entity.ChatRoom;
-//import com.example.chat.domain.chat.entity.Managerqq;
-//import com.example.chat.domain.chat.repository.IChatRoomRepository;
-//import com.example.chat.domain.chat.repository.IManagerRepository;
-import com.smingsming.chat.domain.chat.entity.ChatRoom3;
 import com.smingsming.chat.domain.chat.entity.Participant;
 import com.smingsming.chat.domain.chat.repository.IChatRoomRepository;
 import com.smingsming.chat.domain.chat.repository.IParticipantRepository;
@@ -45,17 +41,14 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     private final RedisSubscriber redisSubscriber;
     private final UserServiceClient userServiceClient;
     private final SongServiceClient songServiceClient;
-    private static final String CHAT_ROOMS = "CHAT_ROOM";
     private static final String ENTER_INFO = "ENTER_INFO";
     private final RedisTemplate<String, Object> redisTemplate;
-    private HashOperations<String, String, ChatRoom> opsHashChatRoom;
     private HashOperations<String, String, String> opsEnterInfo;
     private Map<String, ChannelTopic> topics;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostConstruct
     private void init() {
-        opsHashChatRoom = redisTemplate.opsForHash();
         opsEnterInfo = redisTemplate.opsForHash();
         topics = new HashMap<>();
     }
@@ -63,7 +56,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     @Override
     public RoomVo findById(String roomId) {
 
-        ChatRoom3 room = iChatRoomRepository.findById(roomId).get();
+        ChatRoom room = iChatRoomRepository.findById(roomId).get();
 
         UserDetailVo user = new UserDetailVo();
 
@@ -101,9 +94,10 @@ public class ChatRoomServiceImpl implements IChatRoomService{
         ChatRoom chatRoom = ChatRoom.create(roomAddReqVo.getName(), roomAddReqVo.getPassword(),
                 roomAddReqVo.isLock(), userId, roomAddReqVo.getPlaylistId());
 
-        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getId(), chatRoom);
+//        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getId(), chatRoom);
 
-        iChatRoomRepository.save(new ModelMapper().map(chatRoom, ChatRoom3.class));
+//        iChatRoomRepository.save(new ModelMapper().map(chatRoom, ChatRoom3.class));
+        iChatRoomRepository.save(chatRoom);
 
         return chatRoom;
     }
@@ -112,7 +106,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     public void enterChatRoom(String roomId, String userId) {
         ChannelTopic topic = topics.get(roomId);
 
-        Optional<ChatRoom3> room = iChatRoomRepository.findById(roomId);
+        Optional<ChatRoom> room = iChatRoomRepository.findById(roomId);
 
         if(topic == null)
             topic = new ChannelTopic(roomId);
@@ -138,10 +132,10 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     }
 
     @Override
-    public ChatRoom3 enterRoom(RoomEnterReqVo reqVo, HttpServletRequest request) {
+    public ChatRoom enterRoom(RoomEnterReqVo reqVo, HttpServletRequest request) {
         String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
 
-        Optional<ChatRoom3> room = iChatRoomRepository.findById(reqVo.getRoomId());
+        Optional<ChatRoom> room = iChatRoomRepository.findById(reqVo.getRoomId());
 
         if(!room.isPresent())
             return null;
@@ -167,7 +161,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
     public List<RoomVo> findAllChatRoom(int page) {
         Pageable pr = PageRequest.of(page - 1, 10, Sort.by("id").descending());
         
-        Page<ChatRoom3> roomList = iChatRoomRepository.findAll(pr);
+        Page<ChatRoom> roomList = iChatRoomRepository.findAll(pr);
 
         List<RoomVo> returnList = new ArrayList<>();
 
@@ -260,7 +254,7 @@ public class ChatRoomServiceImpl implements IChatRoomService{
 
         Pageable pr = PageRequest.of(page -1, 10, Sort.by("id").descending());
 
-        Page<ChatRoom3> roomPage = iChatRoomRepository.findAllByNameContains(keyword, pr);
+        Page<ChatRoom> roomPage = iChatRoomRepository.findAllByNameContains(keyword, pr);
 
         List<RoomVo> returnList = new ArrayList<>();
 

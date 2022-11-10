@@ -1,10 +1,7 @@
 package com.smingsming.chat.domain.chat.controller;
 
 import com.smingsming.chat.domain.chat.entity.ChatRoom;
-import com.smingsming.chat.domain.chat.entity.ChatRoom3;
-import com.smingsming.chat.domain.chat.entity.Participant;
 import com.smingsming.chat.domain.chat.service.IChatRoomService;
-import com.smingsming.chat.domain.chat.vo.ParticipantVo;
 import com.smingsming.chat.domain.chat.vo.RoomAddReqVo;
 import com.smingsming.chat.domain.chat.vo.RoomEnterReqVo;
 import com.smingsming.chat.domain.chat.vo.RoomVo;
@@ -35,7 +32,7 @@ public class RoomController {
     @PostMapping("/enter")
     public ResponseEntity<?> enterRoom(@RequestBody RoomEnterReqVo enterReqVo, HttpServletRequest request) {
 
-        ChatRoom3 result = iChatRoomService.enterRoom(enterReqVo, request);
+        ChatRoom result = iChatRoomService.enterRoom(enterReqVo, request);
 
         if (result != null)
             return ResponseEntity.status(HttpStatus.OK).body(result);
